@@ -1,0 +1,123 @@
+// // pipeline {
+// //     agent { label 'node-agent' }
+    
+// //     stages{
+// //         stage('Code'){
+// //             steps{
+// //                 git url: 'https://github.com/LondheShubham153/node-todo-cicd.git', branch: 'master' 
+// //             }
+// //         }
+// //         stage('Build and Test'){
+// //             steps{
+// //                 sh 'docker build . -t trainwithshubham/node-todo-test:latest'
+// //             }
+// //         }
+// //         stage('Push'){
+// //             steps{
+// //                 withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+// //         	     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+// //                  sh 'docker push trainwithshubham/node-todo-test:latest'
+// //                 }
+// //             }
+// //         }
+// //         stage('Deploy'){
+// //             steps{
+// //                 sh "docker-compose down && docker-compose up -d"
+// //             }
+// //         }
+// //     }
+// // }
+
+
+
+// pipeline {
+//     agent { label 'node-agent' }
+    
+//     stages {
+//         stage('Code') {
+//             steps {
+//                 git url: 'https://github.com/IGOCore/IGOBE.git', branch: 'main'
+//             }
+//         }
+//         stage('Test') {
+//             steps {
+//                 sh 'npm install' // install dependencies
+//                 sh 'npm  run test' // run tests
+//             }
+//         }
+//         stage('Build') {
+//             steps {
+//                 sh 'docker build . -t aishwarya-blocsys/jenkins-todo-app:latest'
+//             }
+//         }
+//         stage('Push') {
+//             steps {
+//                 withCredentials([usernamePassword(credentialsId: 'dockerHub', passwordVariable: 'dockerHubPassword', usernameVariable: 'dockerHubUser')]) {
+//                     sh "docker login -u ${env.dockerHubUser} -p ${env.dockerHubPassword}"
+//                     sh 'docker push aishwarya-blocsys/jenkins-todo-app:latest'
+//                 }
+//             }
+//         }
+//         stage('Deploy') {
+//             when {
+//                 branch 'main' // deploy only when merging to the main branch
+//             }
+//             steps {
+//                 sh 'docker-compose down'
+//                 sh 'docker-compose up -d'
+//             }
+//         }
+//     }
+
+//     post {
+//         success {
+//             // Trigger the deployment process after the pull request is merged
+//             build job: 'deploy-my-app'
+//         }
+//     }
+// }
+
+
+
+pipeline {
+    agent { docker { image 'node:latest' } }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/IGOCore/IGOBE.git'
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                sh 'npm install'
+            }
+        }
+        
+        stage('Test') {
+            steps {
+                sh 'npm run test'
+            }
+        }
+        
+        stage('Deploy') {
+            steps {
+                sh 'docker build -t your-image-name .'
+                sh 'docker push your-image-name'
+            }
+        }
+    }
+
+    post {
+        success {
+            // Automatically create a pull request on the server upon successful build
+            sh 'curl -X POST -u your-github-username:your-github-password https://api.github.com/repos/IGOCore/IGOBE/pulls -d \'{"title": "Jenkins automated pull request", "head": "master", "base": "target-branch"}\''
+        }
+        
+        failure {
+            // Print the error message in the console if any test fails
+            sh 'cat test-results.xml'
+        }
+    }
+}

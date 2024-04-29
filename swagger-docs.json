@@ -1,0 +1,1752 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "REFORMA Backend Apis",
+    "description": "This is list of Reforma Backend apis",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://reforma.blocsys.com/api/v1"
+    },
+    {
+      "url": "http://localhost:5000/api/v1"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Admin",
+      "description": "Create new Admin and Login Admin"
+    },
+    {
+      "name": "IGO Pools",
+      "description": "Apis for managing IGOs"
+    },
+    {
+      "name": "user",
+      "description": "Operations about user"
+    },
+    {
+      "name": "settings",
+      "description": "settings to add or remove email address"
+    },
+    {
+      "name": "Pools",
+      "description": "Pool Operations"
+    },
+    {
+      "name": "Logs",
+      "description": "Get application logs"
+    },
+    {
+      "name": "Claims",
+      "description": "Claim api for claim operations"
+    },
+    {
+      "name": "Network",
+      "description": "Network api for network stograge operations"
+    }
+  ],
+  "paths": {
+    "/admin/add": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Add New Admin",
+        "description": "Add Admin with new Username",
+        "requestBody": {
+          "description": "New Admin details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admin-add"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Admin-res"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Not Authorized"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/admin/login": {
+      "post": {
+        "tags": [
+          "Admin"
+        ],
+        "summary": "Admin Login",
+        "description": "Admin Login with Username & password",
+        "requestBody": {
+          "description": "New Admin details",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Admin-login"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Admin-login-res"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid username or password"
+          }
+        }
+      }
+    },
+    "/IGOPools/createIGO": {
+      "post": {
+        "tags": [
+          "IGO Pools"
+        ],
+        "summary": "Creating IGO",
+        "description": "This api is used for creating IGO by giving required inputs",
+        "requestBody": {
+          "description": "There are input required to create an IGO",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IGO-create"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/IGO-create-res"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Something went wrong"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/IGOPools/upcoming-list": {
+      "get": {
+        "tags": [
+          "IGO Pools"
+        ],
+        "summary": "List Upcoming IGOs",
+        "description": "This is api for listing upcoming igos. In list igo api there are fewer data used in response",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination, Default page 1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/commonListRes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/IGOPools/completed-list": {
+      "get": {
+        "tags": [
+          "IGO Pools"
+        ],
+        "summary": "List Completed IGOs",
+        "description": "This is api for listing completed igos, In list igo api there are fewer data used in response",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Page number for pagination, Default page 1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/commonListRes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/IGOPools/get-igo/{id}": {
+      "get": {
+        "tags": [
+          "IGO Pools"
+        ],
+        "summary": "Get single IGO details",
+        "description": "This is api for all getting igos for given igo id",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "ID of IGO",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/commonRes"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/user/list": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Retrive user list",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "page count for pagination",
+            "required": false
+          },
+          {
+            "name": "isActive",
+            "in": "query",
+            "description": "This is boolean flag to specify user activeness with investment",
+            "required": false
+          },
+          {
+            "name": "tier",
+            "in": "query",
+            "description": "To filter by user tier",
+            "required": false
+          },
+          {
+            "name": "kycStatus",
+            "in": "query",
+            "description": "To filter by user kyc status",
+            "required": false
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Filter by user country",
+            "required": false
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "Filter by user country",
+            "required": false
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Filter by user email",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonListRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/generateRandom": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get lottery users",
+        "description": "This api will send email with lottery user file.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/generateLottery"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/generateCsv": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Generate snapshot csv file of given tier after snapshot",
+        "description": "This api will send mail to all specified users",
+        "parameters": [
+          {
+            "name": "tier",
+            "in": "query",
+            "description": "Generate csv file for give tier",
+            "required": true
+          },
+          {
+            "name": "projectId",
+            "in": "query",
+            "description": "Project id",
+            "required": true
+          },
+          {
+            "name": "country",
+            "in": "query",
+            "description": "country to exclude users in csv file",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/snapshotData": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get all snapshots",
+        "description": "Get all completed snapshots of IGO",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "IGO name to filter the data"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/getUserStake": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Generate snapshot for IGO",
+        "description": "This api generates snapshot for IGO and stores user data in DB. The data is provided through emailing the xlsx file",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "query",
+            "description": "IGO name to take snapshot",
+            "required": true
+          },
+          {
+            "name": "country",
+            "in": "quesy",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/getUniqueCountries": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get Countries Symbol",
+        "description": "This api will give list of countries from DB",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/addWallet": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Add user wallet",
+        "description": "This api will send email with lottery user file.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addWallet"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/group": {
+      "get": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user data by group of kyc status",
+        "description": "This api will return list of user grouped by kyc status",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonListRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/subscribe": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get Countries Symbol",
+        "description": "This api will give list of countries from DB",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/subscribe"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/user/updateWallet": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get Countries Symbol",
+        "description": "This api will give list of countries from DB",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateWallet"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/settings/add-snapshot-email": {
+      "post": {
+        "tags": [
+          "settings"
+        ],
+        "summary": "Get Countries Symbol",
+        "description": "This api will give list of countries from DB",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addSnapshotEmails"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/settings/add-cc-email": {
+      "post": {
+        "tags": [
+          "settings"
+        ],
+        "summary": "Get Countries Symbol",
+        "description": "This api will give list of countries from DB",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addSnapshotCCEmails"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/pools/list": {
+      "get": {
+        "tags": [
+          "Pools"
+        ],
+        "summary": "Get pools list",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "description": "Provide token to filter by token",
+            "required": false
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/pools/list/{poolId}": {
+      "get": {
+        "tags": [
+          "Pools"
+        ],
+        "summary": "Get pool by ID",
+        "description": "Pass pool id in path and fetch details of that pool",
+        "parameters": [
+          {
+            "name": "PoolId",
+            "in": "path",
+            "description": "Pass Pool id to get pool details",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/pools/add": {
+      "post": {
+        "tags": [
+          "Pools"
+        ],
+        "summary": "Add pool record",
+        "description": "This api will add pool data in DB",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/poolAdd"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/pools/update/{PoolId}": {
+      "put": {
+        "tags": [
+          "Pools"
+        ],
+        "summary": "Update pool record",
+        "description": "This api will update pool data in DB",
+        "parameters": [
+          {
+            "name": "PoolId",
+            "in": "path",
+            "description": "Pass Pool id to update pool details",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/poolAdd"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/pools/delete/{PoolId}": {
+      "delete": {
+        "tags": [
+          "Pools"
+        ],
+        "summary": "Delete pool record",
+        "description": "This api will delete that pool data",
+        "parameters": [
+          {
+            "name": "PoolId",
+            "in": "path",
+            "description": "Pass Pool id to delete pool details",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/logs/list/": {
+      "get": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Get application logs list",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Pass page for list pagination"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonListRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/logs/{logId}": {
+      "get": {
+        "tags": [
+          "Logs"
+        ],
+        "summary": "Get log by ID",
+        "description": "Pass log id in path and fetch details of that log",
+        "parameters": [
+          {
+            "name": "logId",
+            "in": "path",
+            "description": "Pass Log id to get log details",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/network/list": {
+      "get": {
+        "tags": [
+          "Network"
+        ],
+        "summary": "Get networks",
+        "description": "Get networks list",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/network/add": {
+      "post": {
+        "tags": [
+          "Network"
+        ],
+        "summary": "Add Network record",
+        "description": "This api will add network data in DB",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/networkAdd"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/commonRes"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Internal Server Error"
+          }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Admin-add": {
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "ADMIN-1"
+          },
+          "email": {
+            "type": "string",
+            "example": "admin@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Admin-password"
+          }
+        }
+      },
+      "Admin-login": {
+        "required": [
+          "username",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "username": {
+            "type": "string",
+            "example": "admin"
+          },
+          "password": {
+            "type": "string",
+            "example": "admin"
+          }
+        }
+      },
+      "Admin-login-res": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "string",
+            "example": "true"
+          },
+          "message": {
+            "type": "string",
+            "example": "SUCCESS"
+          },
+          "data": {
+            "type": "string",
+            "example": {
+              "token": "TOKEN"
+            }
+          }
+        }
+      },
+      "Admin-res": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "ADMIN_ADDED_SUCCESSFULLY"
+          },
+          "status": {
+            "type": "boolean",
+            "example": true
+          }
+        }
+      },
+      "IGO-create": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "example": "IGO-1"
+          },
+          "distribute_token": {
+            "type": "integer",
+            "example": 0
+          },
+          "content": {
+            "type": "string",
+            "example": "IGO content"
+          },
+          "up_pool_raise": {
+            "type": "string",
+            "example": 0
+          },
+          "image": {
+            "type": "string",
+            "example": "image-link"
+          },
+          "poolType": {
+            "type": "string",
+            "example": "public"
+          },
+          "participants": {
+            "type": "integer",
+            "example": 0
+          },
+          "min_swap_level": {
+            "type": "string",
+            "example": 100
+          },
+          "symbol": {
+            "type": "string",
+            "example": "AMY"
+          },
+          "decimal": {
+            "type": "integer",
+            "example": 0
+          },
+          "token_address": {
+            "type": "string",
+            "example": ""
+          },
+          "abi_name": {
+            "type": "string",
+            "example": "abi-name"
+          },
+          "total_supply": {
+            "type": "string",
+            "example": 0
+          },
+          "description": {
+            "type": "string",
+            "example": "IGO-Description"
+          },
+          "paymentCypto": {
+            "type": "string",
+            "example": "BSC"
+          },
+          "network_type": {
+            "type": "string",
+            "example": "BSC"
+          },
+          "token_distribution_date": {
+            "type": "string",
+            "example": 1666860871
+          },
+          "socialLinks": {
+            "type": "object",
+            "example": {
+              "twitter": "www.twitter.com",
+              "git": "",
+              "telegram": "",
+              "reddit": "",
+              "medium": "",
+              "browser_web": "",
+              "youtube": "",
+              "instagram": "",
+              "discord": "",
+              "white_paper": "",
+              "facebook": ""
+            }
+          },
+          "contract_type": {
+            "type": "string",
+            "example": "BSC"
+          },
+          "contractAddress": {
+            "type": "string",
+            "example": "Contract address"
+          },
+          "distribution_type": {
+            "type": "string",
+            "example": "BSC"
+          },
+          "Owner": {
+            "type": "string",
+            "example": "Owner address"
+          },
+          "price": {
+            "type": "string",
+            "example": "100"
+          },
+          "phases": {
+            "type": [
+              "object"
+            ],
+            "example": [
+              {
+                "phaseName": "PHASE_ONE",
+                "address": "",
+                "minAllocation": "10",
+                "maxAllocation": "100",
+                "start_date": "1668533090",
+                "end_date": "1668533105",
+                "supply": "10000",
+                "maxTierAllocation": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9
+                ],
+                "minTierAllocation": [
+                  1,
+                  2,
+                  3,
+                  4,
+                  5,
+                  6,
+                  7,
+                  8,
+                  9
+                ]
+              }
+            ]
+          }
+        }
+      },
+      "IGO-create-res": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "IGOpools Created Successfully"
+          },
+          "status": {
+            "type": "boolean",
+            "example": true
+          },
+          "data": {
+            "type": "object",
+            "properties": {
+              "_id": {
+                "type": "string",
+                "example": "123456"
+              },
+              "title": {
+                "type": "string",
+                "example": "IGO-1"
+              },
+              "distribute_token": {
+                "type": "integer",
+                "example": 0
+              },
+              "content": {
+                "type": "string",
+                "example": "IGO content"
+              },
+              "up_pool_raise": {
+                "type": "string",
+                "example": 0
+              },
+              "image": {
+                "type": "string",
+                "example": "image-link"
+              },
+              "poolType": {
+                "type": "string",
+                "example": "public"
+              },
+              "participants": {
+                "type": "integer",
+                "example": 0
+              },
+              "min_swap_level": {
+                "type": "string",
+                "example": 100
+              },
+              "symbol": {
+                "type": "string",
+                "example": "AMY"
+              },
+              "decimal": {
+                "type": "integer",
+                "example": 0
+              },
+              "token_address": {
+                "type": "string",
+                "example": ""
+              },
+              "abi_name": {
+                "type": "string",
+                "example": "abi-name"
+              },
+              "total_supply": {
+                "type": "string",
+                "example": 0
+              },
+              "description": {
+                "type": "string",
+                "example": "IGO-Description"
+              },
+              "paymentCypto": {
+                "type": "string",
+                "example": "BSC"
+              },
+              "network_type": {
+                "type": "string",
+                "example": "BSC"
+              },
+              "token_distribution_date": {
+                "type": "string",
+                "example": 1666860871
+              },
+              "socialLinks": {
+                "type": "object",
+                "example": {
+                  "twitter": "www.twitter.com",
+                  "git": "",
+                  "telegram": "",
+                  "reddit": "",
+                  "medium": "",
+                  "browser_web": "",
+                  "youtube": "",
+                  "instagram": "",
+                  "discord": "",
+                  "white_paper": "",
+                  "facebook": ""
+                }
+              },
+              "contract_type": {
+                "type": "string",
+                "example": "BSC"
+              },
+              "contractAddress": {
+                "type": "string",
+                "example": "Contract address"
+              },
+              "distribution_type": {
+                "type": "string",
+                "example": "BSC"
+              },
+              "Owner": {
+                "type": "string",
+                "example": "Owner address"
+              },
+              "price": {
+                "type": "string",
+                "example": "100"
+              },
+              "phases": {
+                "type": [
+                  "object"
+                ],
+                "example": [
+                  {
+                    "_id": "123123",
+                    "phaseName": "PHASE_ONE",
+                    "address": "",
+                    "minAllocation": "10",
+                    "maxAllocation": "100",
+                    "start_date": "1668533090",
+                    "end_date": "1668533105",
+                    "supply": "10000",
+                    "maxTierAllocation": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ],
+                    "minTierAllocation": [
+                      1,
+                      2,
+                      3,
+                      4,
+                      5,
+                      6,
+                      7,
+                      8,
+                      9
+                    ]
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "commonListRes": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "example": "Response message"
+          },
+          "data": {
+            "type": "array",
+            "example": []
+          },
+          "pagination": {
+            "type": "object",
+            "properties": {
+              "totalCount": {
+                "type": "integer",
+                "example": 20
+              },
+              "pageCount": {
+                "type": "integer",
+                "example": 2
+              },
+              "pageNo": {
+                "type": "integer",
+                "example": 1
+              },
+              "pageLimit": {
+                "type": "integer",
+                "example": 10
+              }
+            }
+          }
+        }
+      },
+      "commonRes": {
+        "type": "object",
+        "properties": {
+          "status": {
+            "type": "boolean"
+          },
+          "message": {
+            "type": "string",
+            "example": "Response message"
+          },
+          "data": {
+            "type": "object",
+            "example": {}
+          }
+        }
+      },
+      "generateLottery": {
+        "type": "object",
+        "properties": {
+          "request": {
+            "type": "string",
+            "example": "20"
+          },
+          "snapshotId": {
+            "type": "string",
+            "example": "snapshot id"
+          },
+          "num": {
+            "type": "string",
+            "example": "total lottery count"
+          },
+          "allTierFileName": {
+            "type": "string",
+            "example": "file name of all tier snapshot file"
+          }
+        }
+      },
+      "addWallet": {
+        "type": "object",
+        "properties": {
+          "walletAddress": {
+            "type": "string",
+            "example": "user wallet address"
+          },
+          "networkId": {
+            "type": "string",
+            "example": "snapshot id"
+          }
+        }
+      },
+      "subscribe": {
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "string",
+            "example": "user wallet address"
+          },
+          "projectId": {
+            "type": "string",
+            "example": "snapshot id"
+          }
+        }
+      },
+      "updateWallet": {
+        "type": "object",
+        "properties": {
+          "walletAddress": {
+            "type": "string",
+            "example": "user wallet address"
+          },
+          "walletId": {
+            "type": "string",
+            "example": "wallet id"
+          },
+          "nonce": {
+            "type": "string",
+            "example": "snapshot id"
+          },
+          "signature": {
+            "type": "string",
+            "example": "signature of user wallet address"
+          }
+        }
+      },
+      "addSnapshotEmails": {
+        "type": "object",
+        "properties": {
+          "snapshotEmail": {
+            "type": "array",
+            "example": [
+              "email1",
+              "email2"
+            ]
+          }
+        }
+      },
+      "addSnapshotCCEmails": {
+        "type": "object",
+        "properties": {
+          "ccEmail": {
+            "type": "array",
+            "example": [
+              "email1",
+              "email2"
+            ]
+          }
+        }
+      },
+      "poolAdd": {
+        "type": "object",
+        "properties": {
+          "poolName": {
+            "type": "string",
+            "example": "Pool name"
+          },
+          "contractAddress": {
+            "type": "string",
+            "example": "Contract address"
+          },
+          "tokenAddress": {
+            "type": "string",
+            "example": "Token address"
+          },
+          "loyalityPoints": {
+            "type": "integer",
+            "example": 20
+          },
+          "contractType": {
+            "type": "string",
+            "example": "staking | farming"
+          },
+          "lptokenAddress": {
+            "type": "string",
+            "example": "token address"
+          },
+          "url": {
+            "type": "string",
+            "example": "Pool url"
+          }
+        }
+      },
+      "networkAdd": {
+        "type": "object",
+        "properties": {
+          "networkName": {
+            "type": "string",
+            "example": "BSC || ETH || ..."
+          }
+        }
+      }
+    },
+    "requestBodies": {
+      "Pet": {
+        "description": "Pet object that needs to be added to the store",
+        "content": {
+          "application/json": {
+            "schema": null
+          },
+          "application/xml": {
+            "schema": null
+          }
+        }
+      },
+      "UserArray": {
+        "description": "List of user object",
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/components/schemas/User"
+              }
+            }
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Authorization": {
+        "type": "apiKey",
+        "name": "x-auth-token",
+        "in": "header"
+      },
+      "api_key": {
+        "type": "apiKey",
+        "name": "api-key",
+        "in": "header"
+      }
+    }
+  }
+}
